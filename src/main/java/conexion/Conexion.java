@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import modelo.Personas;
 
 /**
@@ -58,7 +59,11 @@ public class Conexion {
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
+                System.out.println("===================lista de personas :========================================================================================================================");
                 System.out.println("ID: " + rs.getInt("id") + ", Nombre: " + rs.getString("nombre") + ", Apellido: " + rs.getString("apellido"));
+                JOptionPane.showMessageDialog(null,"ID: " + rs.getInt("id") + ", Nombre: " + rs.getString("nombre") + ", Apellido: " + rs.getString("apellido"));
+                System.out.println("================================================================================================================================================");
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
@@ -79,6 +84,18 @@ public class Conexion {
         }
     }
     
+    public void eliminarPersona(int idPersona) {
+        try {
+            String query = "DELETE FROM persona WHERE id = ?";
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setInt(1, idPersona);
+            pst.executeUpdate();
+            System.out.println("Se eliminó correctamente la persona con id " + idPersona);
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     public static void main(String []args){
         Conexion dao = new Conexion();
@@ -87,6 +104,8 @@ public class Conexion {
         Personas persona1 = new Personas("jhoani", "molano");
         
         //dao.insertarPersona(persona1.getNombre(), persona1.getApellido());
-        dao.editarPersona(1, persona1.getNombre(), persona1.getApellido());
+        //dao.listarPersonas();
+        //dao.editarPersona(2, persona1.getNombre(), persona1.getApellido());
+        //dao.eliminarPersona(2);
     }
 }
