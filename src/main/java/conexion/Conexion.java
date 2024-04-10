@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.Personas;
 
 /**
  *
@@ -50,10 +51,28 @@ public class Conexion {
         }
     }
     
+    public void editarPersona(int idPersona, String nombre, String apellido) {
+        try {
+            String query = "UPDATE persona SET nombre = ?, apellido = ? WHERE id = ?";
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, nombre);
+            pst.setString(2, apellido);
+            pst.setInt(3, idPersona);
+            pst.executeUpdate();
+            System.out.println("Se actualizó correctamente la persona con id " + idPersona);
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public static void main(String []args){
         Conexion dao = new Conexion();
         dao.conectar();
         
+        Personas persona1 = new Personas("cesar", "suarez");
+        
+        dao.insertarPersona(persona1.getNombre(), persona1.getApellido());
         
     }
 }
