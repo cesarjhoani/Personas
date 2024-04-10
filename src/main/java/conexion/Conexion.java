@@ -6,6 +6,7 @@ package conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,8 +36,24 @@ public class Conexion {
          return con;
     }
     
+    
+    public void insertarPersona(String nombre, String apellido) {
+        try {
+            String query = "INSERT INTO persona (nombre, apellido) VALUES (?, ?)";
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setString(1, nombre);
+            pst.setString(2, apellido);
+            pst.executeUpdate();
+            System.out.println("Se insertó correctamente la persona.");
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void main(String []args){
         Conexion dao = new Conexion();
         dao.conectar();
+        
+        
     }
 }
