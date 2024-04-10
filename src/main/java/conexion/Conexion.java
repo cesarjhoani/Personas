@@ -7,6 +7,7 @@ package conexion;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,6 +52,19 @@ public class Conexion {
         }
     }
     
+    public void listarPersonas() {
+        try {
+            String query = "SELECT * FROM persona";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + ", Nombre: " + rs.getString("nombre") + ", Apellido: " + rs.getString("apellido"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void editarPersona(int idPersona, String nombre, String apellido) {
         try {
             String query = "UPDATE persona SET nombre = ?, apellido = ? WHERE id = ?";
@@ -70,9 +84,9 @@ public class Conexion {
         Conexion dao = new Conexion();
         dao.conectar();
         
-        Personas persona1 = new Personas("cesar", "suarez");
+        Personas persona1 = new Personas("jhoani", "molano");
         
-        dao.insertarPersona(persona1.getNombre(), persona1.getApellido());
-        
+        //dao.insertarPersona(persona1.getNombre(), persona1.getApellido());
+        dao.editarPersona(1, persona1.getNombre(), persona1.getApellido());
     }
 }
